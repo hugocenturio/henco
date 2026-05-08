@@ -43,7 +43,11 @@
             </tbody>
         </table>
 
-        <button type="submit" name="confirm_order" class="btn btn-success" data-translate="confirmOrder">Confirm Order</button>
-        <a href="<?= url('/cart') ?>" class="btn btn-secondary">Back to Cart</a>
+        <div class="sticky-cta d-flex flex-wrap gap-2">
+            <a href="<?= url('/cart') ?>" class="btn btn-secondary order-2 order-md-1">Back to Cart</a>
+            <button type="submit" name="confirm_order" class="btn btn-success order-1 order-md-2 ms-md-auto" data-translate="confirmOrder">
+                <i class="fa-solid fa-check me-2"></i>Confirm Order
+            </button>
+        </div>
     </form>
 </div>

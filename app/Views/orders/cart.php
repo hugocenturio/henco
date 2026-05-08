@@ -33,8 +33,8 @@
                 </tbody>
             </table>
             <input type="hidden" name="product_id" value="">
-            <div class="d-flex justify-content-end mt-4">
-                <button type="submit" name="update_cart" class="btn btn-primary me-2">Update Cart</button>
+            <div class="sticky-cta d-flex flex-wrap gap-2 justify-content-end mt-4">
+                <button type="submit" name="update_cart" class="btn btn-primary">Update Cart</button>
                 <a href="<?= url('/finalize-order') ?>" class="btn btn-success">Finalize Order</a>
             </div>
         </form>

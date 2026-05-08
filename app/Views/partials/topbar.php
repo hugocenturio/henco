@@ -32,6 +32,12 @@ $totalUnread   = count($notifications);
 
         <div class="header-right">
             <ul class="clearfix">
+                <li class="icons">
+                    <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                    </button>
+                </li>
                 <?php if ($isAdmin): ?>
                     <li class="icons dropdown">
                         <a href="javascript:void(0)" id="notificationIcon" data-toggle="dropdown">

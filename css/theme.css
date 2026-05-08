@@ -1,0 +1,174 @@
+/* Henco — design tokens & dark-mode override.
+ * Loaded after Bootstrap but before legacy theme css/style.css so app-level
+ * components inherit the tokens. Pages keep working when theme.css is absent. */
+
+:root {
+  /* Brand */
+  --henco-primary:        #7571f9;
+  --henco-primary-dark:   #5a55e0;
+  --henco-accent:         #00c2a8;
+
+  /* Surfaces (light) */
+  --henco-bg:             #f5f7fb;
+  --henco-surface:        #ffffff;
+  --henco-surface-2:      #f0f2f5;
+  --henco-border:         #e3e6ee;
+  --henco-overlay:        rgba(0,0,0,.45);
+
+  /* Text */
+  --henco-text:           #20232a;
+  --henco-text-muted:     #6b7180;
+  --henco-text-on-primary: #ffffff;
+
+  /* States */
+  --henco-success:        #17b26a;
+  --henco-warning:        #f5a623;
+  --henco-danger:         #e5484d;
+
+  /* Sizing — bigger touch targets */
+  --henco-touch-min:      44px;
+  --henco-radius:         .75rem;
+  --henco-radius-lg:      1rem;
+  --henco-shadow-sm:      0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.1);
+  --henco-shadow-md:      0 4px 8px -2px rgba(16,24,40,.1), 0 2px 4px -2px rgba(16,24,40,.06);
+
+  /* Layout */
+  --henco-bottom-nav-h:   64px;
+  --henco-topbar-h:       64px;
+
+  color-scheme: light;
+}
+
+/* Dark mode tokens — applied via [data-theme="dark"] on <html>. */
+:root[data-theme="dark"] {
+  --henco-bg:             #0f1115;
+  --henco-surface:        #181b22;
+  --henco-surface-2:      #20242c;
+  --henco-border:         #2a2f3a;
+  --henco-overlay:        rgba(0,0,0,.6);
+
+  --henco-text:           #e6e8ec;
+  --henco-text-muted:     #9aa1ad;
+
+  --henco-shadow-sm:      0 1px 2px rgba(0,0,0,.5);
+  --henco-shadow-md:      0 6px 14px rgba(0,0,0,.55);
+
+  color-scheme: dark;
+}
+
+/* System preference fallback when the user hasn't picked a theme yet. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --henco-bg:           #0f1115;
+    --henco-surface:      #181b22;
+    --henco-surface-2:    #20242c;
+    --henco-border:       #2a2f3a;
+    --henco-overlay:      rgba(0,0,0,.6);
+    --henco-text:         #e6e8ec;
+    --henco-text-muted:   #9aa1ad;
+    color-scheme: dark;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Apply tokens to common surfaces. Scoped narrowly to avoid clobbering
+   the legacy admin-template look unnecessarily. */
+/* ------------------------------------------------------------------ */
+body {
+  background-color: var(--henco-bg);
+  color: var(--henco-text);
+}
+
+:root[data-theme="dark"] body {
+  background-color: var(--henco-bg);
+  color: var(--henco-text);
+}
+
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .modal-content,
+:root[data-theme="dark"] .dropdown-menu {
+  background-color: var(--henco-surface);
+  border-color: var(--henco-border);
+  color: var(--henco-text);
+}
+
+:root[data-theme="dark"] .card-body,
+:root[data-theme="dark"] .modal-body,
+:root[data-theme="dark"] .modal-header,
+:root[data-theme="dark"] .modal-footer {
+  color: var(--henco-text);
+  border-color: var(--henco-border);
+}
+
+:root[data-theme="dark"] .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--henco-text);
+  --bs-table-border-color: var(--henco-border);
+  --bs-table-striped-bg: var(--henco-surface-2);
+  color: var(--henco-text);
+}
+
+:root[data-theme="dark"] .form-control,
+:root[data-theme="dark"] .form-select {
+  background-color: var(--henco-surface-2);
+  color: var(--henco-text);
+  border-color: var(--henco-border);
+}
+:root[data-theme="dark"] .form-control::placeholder { color: var(--henco-text-muted); }
+
+:root[data-theme="dark"] .form-label,
+:root[data-theme="dark"] .text-muted,
+:root[data-theme="dark"] .small {
+  color: var(--henco-text-muted) !important;
+}
+
+:root[data-theme="dark"] .nav-header,
+:root[data-theme="dark"] .header,
+:root[data-theme="dark"] .nk-sidebar,
+:root[data-theme="dark"] .footer {
+  background-color: var(--henco-surface);
+  color: var(--henco-text);
+  border-color: var(--henco-border);
+}
+
+:root[data-theme="dark"] .nav-link {
+  color: var(--henco-text);
+}
+:root[data-theme="dark"] .nav-link.active {
+  background-color: var(--henco-surface-2);
+  color: var(--henco-primary);
+}
+
+:root[data-theme="dark"] .alert-info {
+  background-color: rgba(117,113,249,.15);
+  color: #c8c5ff;
+  border-color: rgba(117,113,249,.4);
+}
+:root[data-theme="dark"] .alert-success { background:#0e2e22; color:#9ce5bf; border-color:#1c4d3a; }
+:root[data-theme="dark"] .alert-danger  { background:#3a1414; color:#f6b6b9; border-color:#5a1f22; }
+:root[data-theme="dark"] .alert-warning { background:#3a2c0d; color:#f5d68a; border-color:#5a4519; }
+
+/* Buttons keep brand colour but adjust outlined variants for contrast. */
+:root[data-theme="dark"] .btn-secondary {
+  background-color: var(--henco-surface-2);
+  border-color: var(--henco-border);
+  color: var(--henco-text);
+}
+
+/* Theme toggle button — small icon-only round button. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--henco-border);
+  background: var(--henco-surface);
+  color: var(--henco-text);
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.theme-toggle:hover { background: var(--henco-surface-2); transform: scale(1.04); }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun  { display: inline; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }

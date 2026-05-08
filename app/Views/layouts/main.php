@@ -13,8 +13,10 @@ $current   = $current ?? '';
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="<?= e(csrf_token()) ?>">
     <meta name="base-url" content="<?= e(url('/')) ?>">
+    <meta name="theme-color" content="#7571f9">
     <title><?= e($pageTitle) ?></title>
 
+    <script src="<?= asset('js/theme.js') ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>const locale = <?= json_encode($locale) ?>;</script>
     <script src="<?= asset('js/locales.js') ?>"></script>
@@ -22,7 +24,9 @@ $current   = $current ?? '';
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="<?= asset('css/theme.css') ?>" rel="stylesheet">
     <link href="<?= asset('css/style.css') ?>" rel="stylesheet">
+    <link href="<?= asset('css/responsive.css') ?>" rel="stylesheet">
 </head>
 <body data-locale="<?= e($locale) ?>">
 <?php include __DIR__ . '/../partials/flash.php'; ?>
@@ -55,6 +59,27 @@ $current   = $current ?? '';
         </div>
     </footer>
 </div>
+
+<?php include __DIR__ . '/../partials/bottom_nav.php'; ?>
+
+<script>
+(function () {
+    const hamburger = document.querySelector('.nav-control .hamburger');
+    if (hamburger) {
+        hamburger.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.body.classList.toggle('sidebar-open');
+        });
+    }
+    document.addEventListener('click', function (e) {
+        if (!document.body.classList.contains('sidebar-open')) return;
+        const sidebar = document.querySelector('.nk-sidebar');
+        if (sidebar && !sidebar.contains(e.target) && !e.target.closest('.nav-control .hamburger')) {
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+})();
+</script>
 
 <script src="<?= asset('plugins/common/common.min.js') ?>"></script>
 <script src="<?= asset('js/custom.min.js') ?>"></script>
