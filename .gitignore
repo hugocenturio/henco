@@ -1,0 +1,29 @@
+# Real configuration (contains credentials)
+/config/config.php
+
+# IDE / editor
+/.vscode/
+/.idea/
+*.code-workspace
+
+# Project Idx (Google) workspace metadata
+/.idx/
+
+# Claude Code session/local state
+/.claude/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+/logs/
+
+# Uploads — keep folder, ignore user-uploaded content
+/uploads/product_images/*
+!/uploads/product_images/.gitkeep
+
+# PHP runtime
+*.cache
