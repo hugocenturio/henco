@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Notify;
 
 class OrderController extends Controller
 {
@@ -170,6 +171,10 @@ class OrderController extends Controller
             $itemStmt->close();
 
             unset($_SESSION['cart'], $_SESSION['reorder_order_id']);
+
+            $username = $_SESSION['username'] ?? 'a salesperson';
+            Notify::admins("New order #{$orderId} placed by {$username} (€ " . number_format($total, 2, ',', '.') . ').');
+
             $this->flash('success', 'Order #' . $orderId . ' placed successfully.');
             $this->redirect('/order-details?order_id=' . $orderId);
         }
@@ -203,6 +208,16 @@ class OrderController extends Controller
             $stmt->bind_param('isi', $shipped, $shippedAt, $orderId);
             $stmt->execute();
             $stmt->close();
+
+            if ($shipped) {
+                $stmt = $db->prepare('SELECT user_id FROM orders WHERE id = ?');
+                $stmt->bind_param('i', $orderId); $stmt->execute();
+                $stmt->bind_result($ownerId); $stmt->fetch(); $stmt->close();
+                if ($ownerId) {
+                    Notify::user((int) $ownerId, "Your order #{$orderId} has been shipped.");
+                }
+            }
+
             $this->flash('success', $shipped ? 'Order marked as shipped.' : 'Shipment status reverted.');
             $this->redirect('/order-history');
         }

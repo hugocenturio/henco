@@ -15,8 +15,10 @@ $router->any('/setup', 'SetupController@index');
 $router->any('/dashboard', 'DashboardController@index');
 $router->any('/profile',   'ProfileController@index');
 
-// Notifications (AJAX)
-$router->post('/notifications/read', 'NotificationController@markRead');
+// Notifications
+$router->any ('/notifications',         'NotificationController@index');
+$router->post('/notifications/read',    'NotificationController@markRead');
+$router->get ('/notifications/count',   'NotificationController@unreadCount');
 
 // My orders
 $router->get('/my-orders', 'OrderController@mine');

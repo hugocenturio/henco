@@ -2,7 +2,7 @@
 $isAdmin       = !empty($_SESSION['is_admin']);
 $reorderId     = $_SESSION['reorder_order_id'] ?? null;
 $username      = $_SESSION['username'] ?? 'Guest';
-$notifications = $isAdmin ? \App\Controllers\NotificationController::fetchUnread() : [];
+$notifications = !empty($_SESSION['user_id']) ? \App\Controllers\NotificationController::fetchUnread() : [];
 $totalUnread   = count($notifications);
 ?>
 <div class="header">
@@ -38,26 +38,26 @@ $totalUnread   = count($notifications);
                         <i class="fa-solid fa-sun icon-sun"></i>
                     </button>
                 </li>
-                <?php if ($isAdmin): ?>
-                    <li class="icons dropdown">
-                        <a href="javascript:void(0)" id="notificationIcon" data-toggle="dropdown">
-                            <i class="mdi mdi-email-outline"></i>
-                            <?php if ($totalUnread > 0): ?>
-                                <span class="badge gradient-1 badge-pill badge-primary"><?= e($totalUnread) ?></span>
-                            <?php endif; ?>
+                <?php if (!empty($_SESSION['user_id'])): ?>
+                    <li class="icons dropdown notifications-dropdown">
+                        <a href="javascript:void(0)" id="notificationIcon" data-toggle="dropdown" aria-label="Notifications">
+                            <i class="fa-solid fa-bell"></i>
+                            <span id="notificationBadge" class="badge gradient-1 badge-pill badge-primary <?= $totalUnread > 0 ? '' : 'd-none' ?>">
+                                <?= e($totalUnread) ?>
+                            </span>
                         </a>
                         <div class="drop-down animated fadeIn dropdown-menu" id="notificationDropdown">
-                            <div class="dropdown-content-heading d-flex justify-content-between">
-                                <span>
-                                    <?= e($totalUnread) ?>
-                                    <?= $totalUnread === 1 ? 'New Notification' : 'New Notifications' ?>
+                            <div class="dropdown-content-heading d-flex justify-content-between align-items-center">
+                                <span id="notificationDropdownHeading">
+                                    <?= $totalUnread === 1 ? '1 new notification' : e($totalUnread) . ' new notifications' ?>
                                 </span>
+                                <a href="<?= url('/notifications') ?>" class="small">View all</a>
                             </div>
                             <div class="dropdown-content-body">
                                 <ul>
                                     <?php if ($notifications): foreach ($notifications as $n): ?>
                                         <li class="notification-unread">
-                                            <a href="javascript:void(0)">
+                                            <a href="<?= url('/notifications') ?>">
                                                 <div class="notification-content">
                                                     <div class="notification-heading">Notification</div>
                                                     <div class="notification-timestamp">
@@ -69,7 +69,7 @@ $totalUnread   = count($notifications);
                                         </li>
                                     <?php endforeach; else: ?>
                                         <li>
-                                            <div class="notification-content text-muted text-center">No new notifications</div>
+                                            <div class="notification-content text-muted text-center py-3">No new notifications</div>
                                         </li>
                                     <?php endif; ?>
                                 </ul>
