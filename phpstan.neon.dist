@@ -1,0 +1,22 @@
+parameters:
+    level: 5
+    paths:
+        - app
+        - config
+        - bootstrap.php
+        - index.php
+    excludePaths:
+        - vendor
+        - plugins
+        - _icons
+        - logs
+        - uploads
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        # Legacy define()s only become available after bootstrap loads config.
+        - '#Constant DB_(HOST|NAME|USER|PASSWORD) not found#'
+        - '#Constant MAILJET_API_(KEY|SECRET) not found#'
+        # Mysqli result objects are dynamically typed; pragmatically allow.
+        - '#Call to an undefined method mysqli_result#'

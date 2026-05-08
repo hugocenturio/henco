@@ -96,15 +96,40 @@ vendor/              composer dependencies (committed for now; see roadmap)
 
 See `config/routes.php` for the full list.
 
+## Quality tooling
+
+```sh
+composer install            # installs prod + dev deps
+composer test               # PHPUnit
+composer stan               # PHPStan (level 5)
+composer lint               # both
+```
+
+Static analysis config: `phpstan.neon.dist`. Test config: `phpunit.xml.dist`.
+Tests live in `tests/Unit/` and cover the pure-PHP core (router, env, request,
+CSRF helpers). Database-backed integration tests are not yet provided.
+
+GitHub Actions runs lint + PHPStan + PHPUnit on every push and pull request
+against `main` (`.github/workflows/ci.yml`, PHP 8.1 and 8.3).
+
+## Logging
+
+Application events are appended to `logs/app-YYYY-MM-DD.log` via
+`App\Core\Logger`. Debug-level entries are suppressed unless `APP_DEBUG=true`
+is set in `.env`. Login failures, lockouts and DB connect failures are
+captured automatically.
+
 ## Roadmap
 
 - ✅ Phase 1 — Repair & sync working version onto GitHub.
 - ✅ Phase 2 — Security hardening (CSRF, headers, rate-limit, session bootstrap).
 - ✅ Phase 3 — Structure (front controller, router, controllers / views / layouts, PSR-4 autoloader, `.env`-based config).
-- Phase 4 — UX/UI + responsive (mobile-first for field workers, dark mode).
-- Phase 5 — Notifications (toasts, persistent badge, optional web push).
-- Phase 6 — Quality (PHPStan, central logger, basic tests for auth & checkout).
+- ✅ Phase 4 — UX/UI + responsive (mobile-first for field workers, dark mode, bottom nav).
+- ✅ Phase 5 — Notifications (toasts, persistent badge, polled live count).
+- ✅ Phase 6 — Quality (Logger, PHPStan, PHPUnit, GitHub Actions CI).
 - Phase 3.5 — Move `vendor/` and frontend `plugins/` out of the repo: regenerate via `composer install` and `npm install` once stable manifests are in place.
+- Phase 5.5 — Web push notifications (service worker + VAPID).
+- Phase 7 — DB-backed integration tests (auth flow, checkout flow) once a sqlite-or-mysql harness is added.
 
 ## Migrating from a previous install
 

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Logger;
 
 class AuthController extends Controller
 {
@@ -32,12 +33,22 @@ class AuthController extends Controller
                 $email    = trim($this->request->input('email', ''));
                 $password = $this->request->input('password', '');
                 if ($this->attemptLogin($email, $password)) {
+                    Logger::info('Login success', ['email' => $email]);
                     $this->redirect('/dashboard');
                 }
                 $_SESSION['login_attempts']++;
+                Logger::warning('Login failed', [
+                    'email'    => $email,
+                    'attempts' => $_SESSION['login_attempts'],
+                    'ip'       => $_SERVER['REMOTE_ADDR'] ?? null,
+                ]);
                 if ($_SESSION['login_attempts'] >= self::MAX_ATTEMPTS) {
                     $_SESSION['login_locked_until'] = time() + self::LOCKOUT_SECS;
                     $_SESSION['login_attempts']     = 0;
+                    Logger::warning('Login lockout', [
+                        'email' => $email,
+                        'ip'    => $_SERVER['REMOTE_ADDR'] ?? null,
+                    ]);
                     $message = 'Too many failed attempts. Please wait 15 minutes before trying again.';
                 } else {
                     $message = 'Incorrect email or password.';

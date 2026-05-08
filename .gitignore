@@ -20,7 +20,14 @@ desktop.ini
 
 # Logs
 *.log
-/logs/
+/logs/*
+!/logs/.gitkeep
+
+# Tooling caches
+/.phpunit.cache/
+/.phpunit.result.cache
+/.phpstan/
+/.php_cs.cache
 
 # Uploads — keep folder, ignore user-uploaded content
 /uploads/product_images/*

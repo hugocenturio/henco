@@ -13,7 +13,11 @@ class Database
         if (self::$instance === null) {
             $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
             if ($mysqli->connect_error) {
-                error_log('DB connection error: ' . $mysqli->connect_error);
+                Logger::critical('Database connection failed', [
+                    'errno' => $mysqli->connect_errno,
+                    'error' => $mysqli->connect_error,
+                    'host'  => defined('DB_HOST') ? DB_HOST : '?',
+                ]);
                 http_response_code(500);
                 die('Service temporarily unavailable. Please try again later.');
             }
