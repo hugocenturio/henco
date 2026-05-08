@@ -36,6 +36,7 @@ $mysqli->query($create_product_images_table_sql);
 
 // Handle product details update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     if (isset($_POST['edit_product'])) {
         $product_id = intval($_POST['product_id']);
         $name = trim($_POST['name']);
@@ -110,6 +111,7 @@ include 'template.php';
     <div class="card shadow-sm p-4">
 
         <form method="POST" action="" enctype="multipart/form-data" class="row g-4">
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
 
             <!-- General Information -->

@@ -28,6 +28,7 @@ $mysqli->query($create_clients_table_sql);
 
 // Process actions to add, edit, and delete clients
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     if (isset($_POST['add_client'])) {
         $name = trim($_POST['name']);
         $nif = trim($_POST['nif']); 
@@ -111,6 +112,7 @@ include 'template.php';
                             <td class="text-right">
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editClientModal" onclick='populateEditModalClient(<?php echo json_encode($client); ?>)' data-translate="edit">Edit</button>
                                 <form method="POST" action="" class="d-inline-block">
+                                    <?php echo csrf_field(); ?>
                                     <input type="hidden" name="delete_client" value="1">
                                     <input type="hidden" name="client_id" value="<?php echo $client['id']; ?>">
                                     <button type="submit" class="btn btn-danger" data-translate="delete">Delete</button>
@@ -135,6 +137,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="addClientForm" method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="add_client" value="1">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addClientModalLabel" data-translate="addClient">Add Client</h5>
@@ -188,6 +191,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="edit_client" value="1">
                 <input type="hidden" id="edit_client_id" name="client_id">
                 <div class="modal-header">

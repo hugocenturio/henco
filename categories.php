@@ -21,6 +21,7 @@ $mysqli->query($create_categories_table_sql);
 
 // Process actions to add, edit, and delete categories
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     if (isset($_POST['add_category'])) {
         $name = trim($_POST['name']);
         $stmt_add = $mysqli->prepare('INSERT INTO categories (name) VALUES (?)');
@@ -96,6 +97,7 @@ include 'template.php';
                             <button class="btn btn-warning edit-category-btn" data-bs-toggle="modal" data-bs-target="#editCategoryModal" data-category='<?php echo json_encode($category); ?>' data-translate="edit">Edit</button>
                             <!-- Form to delete category -->
                             <form method="POST" action="" class="d-inline-block">
+                                <?php echo csrf_field(); ?>
                                 <input type="hidden" name="delete_category" value="1">
                                 <input type="hidden" name="category_id" value="<?php echo $category['id']; ?>">
                                 <button type="submit" class="btn btn-danger" data-confirm="confirmDelete" data-translate="delete">Delete</button>
@@ -118,6 +120,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <div class="modal-header">
                     <h5 class="modal-title" id="addCategoryModalLabel" data-translate="add">Add</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -143,6 +146,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <div class="modal-header">
                     <h5 class="modal-title" id="editCategoryModalLabel" data-translate="edit">Edit Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

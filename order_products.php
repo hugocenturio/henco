@@ -13,6 +13,7 @@ if (!isset($_SESSION['cart'])) {
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
+    csrf_verify();
     $product_id = intval($_POST['product_id']);
     $quantity = intval($_POST['quantity']);
 
@@ -106,6 +107,7 @@ include 'template.php';
                         <td><?php echo htmlspecialchars($product['stock']); ?></td>
                         <td style="text-align:right">
                             <form method="POST" action="" class="d-inline-block">
+                                <?php echo csrf_field(); ?>
                                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                                 <div class="input-group">
                                     <input type="number" class="form-control" name="quantity" style="width:50px" value="1" min="1" max="<?php echo $product['stock']; ?>" required>

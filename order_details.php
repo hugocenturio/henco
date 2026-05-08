@@ -37,6 +37,7 @@ if ($mysqli->connect_error) {
 
 // 1) Lê o pedido de apagar a encomenda
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
+    csrf_verify();
     // Só administradores podem apagar (ajusta se quiseres outra regra)
     if ($role_id != 1) {
         $_SESSION['error_message'] = translate('noPermissions', $translations);//'You do not have permission to delete orders.';
@@ -114,6 +115,7 @@ $mysqli->close();
 
 // 1) Reencomendar (adicionar produtos ao carrinho)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reorder'])) {
+    csrf_verify();
 
   // Define a variável de sessão com o ID da encomenda
     $_SESSION['reorder_order_id'] = $order_id;   
@@ -156,14 +158,16 @@ include 'template.php';
                     
                   <!-- Botão para reencomendar (reorder) -->
                 <form method="POST" action="" class="me-2">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" name="reorder" class="btn btn-info" data-translate="reorder">
                         Reorder
                     </button>
-                </form>                  
+                </form>
 
- 
+
                 <!-- Button to resend email -->
                 <form method="POST" action="sendEmail.php" class="me-2">
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
                     <button type="submit" class="btn btn-primary">
                         <?php echo translate('sendOrderEmail', $translations) ?: 'Resend Email'; ?>
@@ -173,6 +177,7 @@ include 'template.php';
                 <?php if ($role_id == 1): ?>
                     <!-- Botão para apagar a encomenda (só mostra se for admin) -->
                     <form method="POST" action="">
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="delete_order" value="<?php echo $order['id']; ?>">
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-trash"></i>

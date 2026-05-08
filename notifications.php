@@ -24,6 +24,7 @@ $stmt->close();
 
 // Marcar notificações como lidas se houver solicitação
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_as_read'])) {
+    csrf_verify();
     if ($is_admin) {
         $mysqli->query("UPDATE notifications SET is_read = 1 WHERE is_read = 0");
     } else {

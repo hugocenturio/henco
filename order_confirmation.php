@@ -4,6 +4,7 @@ $page_title = 'Order Confirmation';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_from_cart'])) {
+    csrf_verify();
     $product_id = intval($_POST['product_id']);
     unset($_SESSION['cart'][$product_id]);
     $_SESSION['success_message'] = 'Produto removido do carrinho com sucesso!';
@@ -13,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_from_cart'])) 
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cart'])) {
+    csrf_verify();
     foreach ($_POST['quantities'] as $product_id => $quantity) {
         $product_id = intval($product_id);
         $quantity = intval($quantity);
@@ -75,6 +77,7 @@ include 'template.php';
 
     <?php if (!empty($cart_items)): ?>
         <form method="POST" action="">
+            <?php echo csrf_field(); ?>
             <table id="cartTable" class="table table-bordered table-striped">
                 <thead class="table-light">
                     <tr>
@@ -101,6 +104,7 @@ include 'template.php';
                             <td>€ <?php echo htmlspecialchars(number_format($subtotal, 2, ',', '.')); ?></td>
                             <td>
                                 <form method="POST" action="" style="display:inline-block;">
+                                    <?php echo csrf_field(); ?>
                                     <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
                                     <button type="submit" name="remove_from_cart" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this product from the cart?');">Remove</button>
                                 </form>

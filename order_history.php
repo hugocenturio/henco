@@ -17,6 +17,7 @@ if ($mysqli->connect_error) {
 
 // Manipular marcar como expedida ou reverter o status de envio
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_shipped'])) {
+    csrf_verify();
     $order_id = intval($_POST['order_id']);
     $mark_shipped = intval($_POST['mark_shipped']);
     $shipped_at = $mark_shipped ? date('Y-m-d H:i:s') : null;
@@ -74,6 +75,7 @@ include 'template.php';
                             <td class="text-right">
                                 <a href="order_details.php?order_id=<?php echo $order['id']; ?>" class="btn btn-primary" data-translate="viewDetails">View Details</a>
                                 <form method="POST" action="" class="d-inline-block">
+                                    <?php echo csrf_field(); ?>
                                     <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
                                     <?php if ($order['shipped'] == 1): ?>
                                         <button type="submit" name="mark_shipped" value="0" class="btn btn-danger" onclick="return confirm('Are you sure you want to revert the shipment status?');" data-translate="revertShipment">Revert Shipment</button>

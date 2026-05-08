@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+require_once __DIR__ . '/config/security.php';
 include 'get_settings.php';
 
 $company_name = $_SESSION['Henco'] ?? 'Default Company';
@@ -9,6 +9,9 @@ if (!isset($_SESSION['locale'])) {
     $_SESSION['locale'] = $locale;
 }
 
+// Whitelist locale for safe injection into HTML/JS (defence in depth).
+$locale = preg_match('/^[a-z]{2}(?:-[A-Z]{2})?$/', $locale) ? $locale : 'en';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,13 +20,14 @@ if (!isset($_SESSION['locale'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="<?php echo htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
     <title><?php echo htmlspecialchars($page_title, ENT_QUOTES, 'UTF-8'); ?></title>
         
     <!-- Bootstrap JavaScript -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>        
     
     <!-- Custom JavaScript -->    
-    <script> const locale = '<?php echo $locale; ?>';</script>       
+    <script> const locale = <?php echo json_encode($locale); ?>;</script>
     <script src="js/locales.js"></script>  
 
     <!-- DataTables -->
@@ -42,7 +46,7 @@ if (!isset($_SESSION['locale'])) {
     
  </head>
 
-<body data-locale="<?php echo $locale; ?>">
+<body data-locale="<?php echo htmlspecialchars($locale, ENT_QUOTES, 'UTF-8'); ?>">
 <?php include 'flash_messages.php';  ?>      
     <!-- Preloader -->
     <div id="preloader">

@@ -22,6 +22,7 @@ $mysqli->query($create_settings_table_sql);
 
 // Handle form submission to update all settings
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     $settings = [
         'manager_email' => [
             'value' => trim($_POST['manager_email'] ?? ''),
@@ -98,6 +99,7 @@ include 'template.php';
 
     <!-- Unified form to update all settings -->
     <form method="POST" action="">
+        <?php echo csrf_field(); ?>
         <div class="mb-4">
             <label for="managerEmail" class="form-label" data-translate="managerEmail">Manager Email:</label>
             <input type="email" id="managerEmail" name="manager_email" class="form-control"

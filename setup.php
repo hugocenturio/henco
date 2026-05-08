@@ -11,6 +11,8 @@
  * DELETE this file after setup is complete.
  */
 
+require_once __DIR__ . '/config/security.php';
+
 // Abort if already fully installed (config exists and has real values)
 if (file_exists(__DIR__ . '/config/config.php')) {
     $cfg = file_get_contents(__DIR__ . '/config/config.php');
@@ -27,6 +29,8 @@ $errors  = [];
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    csrf_verify();
 
     // 1. Collect & validate input
     $db_host        = trim($_POST['db_host']        ?? '');
@@ -204,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <form method="POST" action="" autocomplete="off" novalidate>
+                    <?php echo csrf_field(); ?>
 
                     <p class="section-title">Database</p>
                     <div class="mb-3">

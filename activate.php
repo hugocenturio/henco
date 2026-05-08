@@ -1,9 +1,8 @@
 <?php
-// Start session, if necessary
-// session_start();
+require_once __DIR__ . '/config/security.php';
 
 // Database connection
-require_once 'config/config.php';
+require_once __DIR__ . '/config/config.php';
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 $message = '';

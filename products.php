@@ -35,6 +35,7 @@ $mysqli->query($create_products_table_sql);
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     if (isset($_POST['add_product'])) {
         $name = $mysqli->real_escape_string($_POST['name']);
         $reference = $mysqli->real_escape_string($_POST['reference']);
@@ -143,6 +144,7 @@ include 'template.php';
                             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal" data-translate="edit" onclick='populateEditModalProduct(<?php echo json_encode($product); ?>)'>Edit</button>
                             <!-- Form to delete product -->
                             <form method="POST" action="" class="d-inline-block">
+                                <?php echo csrf_field(); ?>
                                 <input type="hidden" name="delete_product" value="1">
                                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                                 <button type="submit" class="btn btn-danger" data-translate="delete" data-confirm="confirmDelete">Delete</button>
@@ -166,6 +168,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="addProductForm" method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="add_product" value="1">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addProductModalLabel" data-translate="add">Add Product</h5>
@@ -224,6 +227,7 @@ include 'template.php';
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="updateProductForm" method="POST" action="">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="edit_product" value="1">
                 <input type="hidden" id="edit_product_id" name="product_id">
                 <div class="modal-header">

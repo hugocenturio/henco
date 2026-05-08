@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role_id']) || $_SESSION['r
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+    csrf_verify();
     $file = $_FILES['csv_file']['tmp_name'];
 
     if (($handle = fopen($file, 'r')) !== false) {
@@ -119,6 +120,7 @@ include 'template.php';
         </div>
     <?php endif; ?>
     <form action="upload_products.php" method="POST" enctype="multipart/form-data" class="mb-4">
+        <?php echo csrf_field(); ?>
         <div class="mb-3">
             <label for="csv_file" class="form-label" data-translate="selectFile">Select CSV File:</label>
             <input type="file" id="csv_file" name="csv_file" class="form-control" accept=".csv" required>

@@ -34,11 +34,12 @@ $company_name = $_SESSION['company_name'];
             <span data-translate="orderInContext">You are reordering from Order</span> #<?php echo htmlspecialchars($_SESSION['reorder_order_id']); ?>
     
     <form method="POST" action="" style="display: inline;">
+        <?php echo csrf_field(); ?>
         <!-- Botão de fechar que também envia POST -->
-        <button 
-            type="submit" 
-            name="clear_reorder" 
-            class="close" 
+        <button
+            type="submit"
+            name="clear_reorder"
+            class="close"
             aria-label="Close"
         >
             <span aria-hidden="true">&times;</span>

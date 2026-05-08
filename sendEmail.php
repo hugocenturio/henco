@@ -22,6 +22,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Verifica se recebemos o order_id (podes receber via GET ou POST, ajusta conforme o teu caso)
 if (isset($_POST['order_id'])) {
+    csrf_verify();
     $order_id = intval($_POST['order_id']);
 } elseif (isset($_GET['order_id'])) {
     $order_id = intval($_GET['order_id']);
