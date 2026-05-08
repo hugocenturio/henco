@@ -1,0 +1,38 @@
+# Henco — front controller routing
+#
+# Static files (css, js, images, vendor assets, uploads, plugins, _icons,
+# favicon, .well-known) are served directly. Everything else is handled by
+# index.php.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Strip a trailing slash from non-existing directories so /products/ works.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Pass through real files (assets) and real directories.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Everything else -> front controller.
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Block direct access to internal directories even if mod_rewrite is off.
+<IfModule mod_authz_core.c>
+    <DirectoryMatch "^(app|config|database|locales|scss|vendor)(/|$)">
+        Require all denied
+    </DirectoryMatch>
+    <FilesMatch "^(\.env|\.env\.example|composer\.(json|lock)|bootstrap\.php|README\.md)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    <FilesMatch "^(\.env|\.env\.example|composer\.(json|lock)|bootstrap\.php|README\.md)$">
+        Order deny,allow
+        Deny from all
+    </FilesMatch>
+</IfModule>

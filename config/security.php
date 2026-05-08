@@ -61,6 +61,16 @@ if (!headers_sent()) {
 }
 
 // -------------------------------------------------------------------
-// 3. CSRF helpers (token, hidden field, verify)
+// 3. CSRF helpers
 // -------------------------------------------------------------------
-require_once __DIR__ . '/../helpers.php';
+// Helpers are loaded by bootstrap.php; only fall back when this file is
+// required by a legacy script that did not go through bootstrap.
+if (!function_exists('csrf_token')) {
+    $legacyHelpers = __DIR__ . '/../helpers.php';
+    $appHelpers    = __DIR__ . '/../app/helpers.php';
+    if (is_file($appHelpers)) {
+        require_once $appHelpers;
+    } elseif (is_file($legacyHelpers)) {
+        require_once $legacyHelpers;
+    }
+}

@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Marcar notificações como lidas ao abrir o popup
     notificationIcon.addEventListener('click', function () {
-        const body = 'mark_as_read=1&csrf_token=' + encodeURIComponent(csrfToken);
-        fetch('notifications.php', {
+        const body = 'csrf_token=' + encodeURIComponent(csrfToken);
+        const base = document.querySelector('meta[name="base-url"]')?.content || '/';
+        fetch(base.replace(/\/$/, '') + '/notifications/read', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: body
